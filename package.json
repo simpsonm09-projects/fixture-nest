@@ -15,6 +15,7 @@
     "start:prod": "node dist/main.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "coverage": "vitest run --coverage",
     "spec": "node scripts/write-openapi.mjs"
   },

@@ -16,7 +16,7 @@ The service exposes item CRUD over HTTP behind a layered architecture. A control
 ```bash
 just install
 just deps
-just verify
+just check
 ```
 
 ## Commands
@@ -25,12 +25,16 @@ just verify
 | --- | --- |
 | `just install` | Installs the pinned tools. |
 | `just deps` | Installs the Node dependencies with `npm ci`. |
+| `just fmt-check` | Fails when a source is not Biome-formatted. |
 | `just lint` | Runs the linters. |
+| `just typecheck` | Typechecks the project with `tsc --noEmit`. |
 | `just test` | Runs the vitest suite. |
 | `just coverage` | Runs the tests and writes `coverage/lcov.info`. |
 | `just spec` | Regenerates `docs/openapi.json` from the controller and the DTOs. |
 | `just serve` | Builds and serves the API on port 3000. |
-| `just verify` | Lints and tests. |
+| `just check` | Runs everything CI requires: format, lint, typecheck, tests, and the API document diff. |
+| `just hooks` | Installs the `pre-push` guard that refuses a push to `main`. |
+| `just agent-files` | Checks the skill tree and its Claude Code links. |
 
 ## Documentation
 

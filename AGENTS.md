@@ -11,7 +11,7 @@ A layered NestJS item CRUD service. It is the TypeScript fixture for the fleet s
 
 ## Commands
 
-- `just install`, `just deps`, `just lint`, `just lint-fix`, `just aislop`, `just test`, `just coverage`, `just spec`, `just serve`, `just verify`, `just prune`.
+- `just install`, `just deps`, `just fmt-check`, `just lint`, `just lint-fix`, `just aislop`, `just typecheck`, `just test`, `just coverage`, `just spec`, `just check`, `just serve`, `just hooks`, `just agent-files`, `just prune`.
 
 ## Repo facts
 
@@ -20,7 +20,9 @@ A layered NestJS item CRUD service. It is the TypeScript fixture for the fleet s
 - Data: no database. `src/item/store/in-memory-item.repository.ts` holds a `Map` and seeds three items on construction.
 - Domain: `GET`, `POST`, `PUT`, and `DELETE` over `/items`. Reads, updates, and deletes of an unknown id throw `ItemNotFoundException`, which `src/common/http-exception.filter.ts` maps to a 404 `application/problem+json` body.
 - Contracts: `docs/openapi.json` is generated from the controller and the DTOs. Regenerate it with `just spec`.
-- Docs: `docs/README.md` indexes the architecture, the items feature, and the OpenAPI contract.
+- Docs: `docs/README.md` indexes the architecture, the items feature, and the OpenAPI contract. `docs/exceptions.md` records the standard rules this repository does not meet yet, including the Bun toolchain exception (C7.3).
+- Hooks: `just hooks` points `core.hooksPath` at `.githooks`, whose `pre-push` refuses a push to `main`. The ruleset is the real gate.
+- Agent files: `just agent-files` checks `.agents/skills` and its `.claude/skills` links. This repository has no repo-local skills.
 
 ## Skills
 

@@ -13,7 +13,15 @@ install:
 
 # Install the Node dependencies from the lockfile.
 deps:
-    npm ci
+    mise exec -- npm ci
+
+# Format the sources with Biome.
+fmt:
+    mise exec -- biome format --write .
+
+# Fail when a source is not Biome-formatted.
+fmt-check:
+    mise exec -- biome format .
 
 # Run every linter over the tracked files.
 lint:
@@ -27,26 +35,46 @@ lint-fix:
 aislop:
     npx --yes aislop@0.16.1 ci
 
+# Typecheck the project without emitting.
+typecheck:
+    mise exec -- npm run typecheck
+
 # Run the test suite. `mise run test` holds the repository test command.
 test:
     mise run test
 
 # Run the tests and write an lcov report to coverage/lcov.info.
 coverage:
-    npm ci
-    npm run coverage
+    mise exec -- npm ci
+    mise exec -- npm run coverage
 
 # Regenerate docs/openapi.json from the controller and the DTOs.
 spec:
-    node scripts/write-openapi.mjs
+    mise exec -- node scripts/write-openapi.mjs
+
+# Fail when the generated API document differs from the code.
+spec-check:
+    just spec
+    git diff --exit-code -- docs/openapi.json
 
 # Build and serve the API on http://127.0.0.1:3000.
 serve:
     mise run serve
 
-# Lint and test.
-verify: lint test
+# Everything CI requires.
+check: fmt-check lint typecheck test spec-check
+
+# Historical alias for `check`, kept for the support template.
+verify: check
+
+# Install the guarded git hook.
+hooks:
+    git config --local core.hooksPath .githooks
+
+# Check the .agents/skills tree and its .claude/skills links.
+agent-files:
+    mise exec -- node scripts/agent-files.mjs
 
 # Prune remote-tracking refs and delete local branches merged into main.
 prune:
-    node scripts/prune.mjs
+    mise exec -- node scripts/prune.mjs
